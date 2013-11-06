@@ -1,0 +1,2 @@
+[AND [ALL :Employee Canadian]]
+[ALL :Employee [AND American Canadian]]
