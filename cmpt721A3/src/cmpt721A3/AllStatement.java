@@ -52,9 +52,10 @@ public class AllStatement extends Statement {
 	@Override
 	public boolean subsumes(Statement other)
 	{
+		AllStatement all;
 		if(other instanceof AllStatement)
 		{
-			AllStatement all = (AllStatement)other;
+			all = (AllStatement)other;
 			if(! all.getRole().equals(role))
 			{
 				return false;
@@ -62,7 +63,17 @@ public class AllStatement extends Statement {
 			return this.description.subsumes(all.getDescription());
 		}
 		
-		//TODO: other cases
+		if(other instanceof AndStatement)
+		{
+			AndStatement and = (AndStatement)other;
+			all = and.getAll(this);
+			if(all == null)
+			{
+				return false;
+			}
+			return this.description.subsumes(all.getDescription());
+		}
+		
 		return false;
 	}
 

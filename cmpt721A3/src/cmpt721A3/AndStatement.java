@@ -121,10 +121,18 @@ public class AndStatement extends Statement implements Iterable<Statement>
 		return exists.values().iterator().next();
 	}
 	
+	public int size()
+	{
+		return atoms.size() + alls.size() + exists.size();
+	}
+	
 	public boolean hasSizeOne()
 	{
-		return (atoms.size() + alls.size() + exists.size()) == 1;
-				
+		int size = atoms.size();
+		if(size > 1) return false;
+		size += alls.size();
+		if(size > 1) return false;
+		return (size + exists.size()) == 1;
 	}
 	
 	public ExistsStatement getExists(ExistsStatement ex)
@@ -132,6 +140,16 @@ public class AndStatement extends Statement implements Iterable<Statement>
 		return exists.get(ex.getRole());
 	}
 	
+	public AllStatement getAll(AllStatement all)
+	{
+		return alls.get(all.getRole());
+	}
+	
+	public boolean containsAtom(AtomicStatement atom)
+	{
+		return atoms.contains(atom);
+	}
+		
 	@Override
 	public boolean isVacuous()
 	{
@@ -173,7 +191,53 @@ public class AndStatement extends Statement implements Iterable<Statement>
 	@Override
 	public boolean subsumes(Statement other)
 	{
-		// TODO Auto-generated method stub
+		
+		ExistsStatement otherEx;
+		AllStatement otherAll;
+		if(other instanceof AndStatement)
+		{
+			AndStatement and = (AndStatement)other;
+			if(this.size() > and.size())
+			{
+				/* If this statement has more conjuncts than the other, then either
+				 * this statement is a subset of the other, or their difference is
+				 * not the empty set.*/
+				return false;
+			}
+			
+			for(Statement currentStatement : this)
+			{
+				if(currentStatement instanceof AtomicStatement)
+				{
+					if(! and.containsAtom((AtomicStatement)currentStatement))
+					{
+						return false;
+					}
+				}
+				else if(currentStatement instanceof ExistsStatement)
+				{
+					otherEx = and.getExists((ExistsStatement) currentStatement);
+					if(otherEx == null || ! currentStatement.subsumes(otherEx))
+					{
+						return false;
+					}
+				}
+				else//must be an AllStatement
+				{
+					otherAll = and.getAll((AllStatement)currentStatement);
+					if(otherAll == null || ! currentStatement.subsumes(otherAll))
+					{
+						return false;
+					}
+				}
+			}
+			
+			return true;
+		}
+		
+		//If the other statement is not an AND, this cannot subsume it because a normalized AND
+		//has at least 2 conjuncts, so this must be more specific, or incomparable, to any non-AND
+		//statement.
 		return false;
 	}
 
