@@ -42,7 +42,11 @@ public class AtomicStatement extends Statement
 		{
 			return this.equals((AtomicStatement)other);
 		}
-		
+		else if(other instanceof AndStatement)
+		{
+			AndStatement and = (AndStatement)other;
+			return and.containsAtom(this);
+		}
 		return false;
 	}
 
