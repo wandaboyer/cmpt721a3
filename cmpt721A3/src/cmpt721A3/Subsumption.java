@@ -21,18 +21,10 @@ public class Subsumption
 		System.out.println("The second statement (normalized) is:");
 		System.out.println(stmt2);
 		
-		Subsumption sub = new Subsumption();
-		
-		
-		
-		//TODO: Subsumption.
-		System.out.println(stmt1+" "+ sub.computeSubsumption(stmt1, stmt2) +" subsumed by "+ stmt2);
-		
-		reader.close();
-	}
+		boolean firstSubsSecond = stmt1.subsumes(stmt2);
+		boolean secondSubsFirst = stmt2.subsumes(stmt1);
 
-	private String computeSubsumption(Statement stmt1, Statement stmt2) {
-		// TODO Auto-generated method stub
-		return "";
+		//TODO: output results
+		reader.close();
 	}
 }

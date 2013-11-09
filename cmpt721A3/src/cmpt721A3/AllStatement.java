@@ -49,4 +49,21 @@ public class AllStatement extends Statement {
 		return "[ALL :" + role + " " + description + "]";
 	}
 
+	@Override
+	public boolean subsumes(Statement other)
+	{
+		if(other instanceof AllStatement)
+		{
+			AllStatement all = (AllStatement)other;
+			if(! all.getRole().equals(role))
+			{
+				return false;
+			}
+			return this.description.subsumes(all.getDescription());
+		}
+		
+		//TODO: other cases
+		return false;
+	}
+
 }

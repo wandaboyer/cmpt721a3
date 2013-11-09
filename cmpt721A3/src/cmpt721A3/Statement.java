@@ -4,4 +4,6 @@ public abstract class Statement
 {
 	public abstract boolean isVacuous();
 	public abstract String toString();
+	
+	public abstract boolean subsumes(Statement other);
 }

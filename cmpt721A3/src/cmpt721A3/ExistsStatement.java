@@ -1,6 +1,7 @@
 package cmpt721A3;
 
-public class ExistsStatement extends Statement {
+public class ExistsStatement extends Statement
+{
 
 	private int quantity;
 	private AtomicStatement role;
@@ -47,6 +48,35 @@ public class ExistsStatement extends Statement {
 	public String toString()
 	{
 		return "[EXISTS " + quantity + " " + role + "]";
+	}
+
+	@Override
+	public boolean subsumes(Statement other)
+	{
+		ExistsStatement ex;
+		if(other instanceof ExistsStatement)
+		{
+			ex = (ExistsStatement) other;
+			if( ! ex.role.equals(this.role))
+			{
+				return false;
+			}
+			
+			return (this.quantity <= ex.getQuantity());
+		}
+		
+		if(other instanceof AndStatement)
+		{
+			AndStatement and = (AndStatement)other;
+			ex = and.getExists(this);
+			if(ex == null)
+			{
+				return false;
+			}
+			return this.quantity <= ex.getQuantity();
+		}
+		
+		return false;
 	}
 
 }

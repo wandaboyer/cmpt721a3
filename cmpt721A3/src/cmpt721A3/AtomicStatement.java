@@ -35,4 +35,15 @@ public class AtomicStatement extends Statement
 		return name;
 	}
 
+	@Override
+	public boolean subsumes(Statement other)
+	{
+		if(other instanceof AtomicStatement)
+		{
+			return this.equals((AtomicStatement)other);
+		}
+		
+		return false;
+	}
+
 }

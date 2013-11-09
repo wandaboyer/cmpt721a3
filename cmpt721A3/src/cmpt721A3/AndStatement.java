@@ -127,6 +127,11 @@ public class AndStatement extends Statement implements Iterable<Statement>
 				
 	}
 	
+	public ExistsStatement getExists(ExistsStatement ex)
+	{
+		return exists.get(ex.getRole());
+	}
+	
 	@Override
 	public boolean isVacuous()
 	{
@@ -163,6 +168,13 @@ public class AndStatement extends Statement implements Iterable<Statement>
 	public Iterator<Statement> iterator()
 	{
 		return new AndIterator(atoms, alls, exists);
+	}
+
+	@Override
+	public boolean subsumes(Statement other)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
