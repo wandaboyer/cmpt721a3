@@ -3,8 +3,9 @@ package cmpt721A3;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
-public class AndStatement extends Statement
+public class AndStatement extends Statement implements Iterable<Statement>
 {
 
 	private HashSet<AtomicStatement> atoms;
@@ -156,6 +157,12 @@ public class AndStatement extends Statement
 		val += "]";
 		
 		return val;
+	}
+
+	@Override
+	public Iterator<Statement> iterator()
+	{
+		return new AndIterator(atoms, alls, exists);
 	}
 
 }
