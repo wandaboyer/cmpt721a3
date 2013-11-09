@@ -60,7 +60,7 @@ public class DLReader
 		String[] parts = str.substring(roleStart).split("[\\s\\[]", 2);
 		if(parts.length < 2)
 		{
-			throw new RuntimeException("Parse Error: Could not find the end of the role in all statement:\n" + str);
+			throw new RuntimeException("Parse Error: Could not find the role in all statement (missing \':\'?):\n" + str);
 		}
 		
 		AtomicStatement role = getAtomicStatement(parts[0].trim());
@@ -257,7 +257,7 @@ public class DLReader
 			}
 			
 			Statement st = parseStatement(stmt);
-			return st.isVacuous() ? AtomicStatement.EMPTY_CONCEPT : st;
+			return st.isVacuous() ? AtomicStatement.UNIVERSAL_CONCEPT : st;
 		}
 		catch (IOException ioEx)
 		{

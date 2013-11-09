@@ -1,2 +1,2 @@
-[AND [EXIST 1 Person] [EXISTS 3 Person]]
-[AND [ALL :Accountant Potato] [ALL :Accountant Tomato]]
+[EXISTS 1 Teacher]
+[AND [EXISTS 2 Teacher] [ALL :Teacher Male]]

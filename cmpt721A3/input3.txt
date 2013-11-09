@@ -1,2 +1,2 @@
-[AND]
-Thing
+[AND [ALL :Friend [EXISTS 3 Teacher]] [ALL :Friend [AND [ALL :Teacher Person] [EXISTS 2 Teacher]]]]
+[ALL :Friend [ALL :Teacher Female]]

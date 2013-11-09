@@ -1,2 +1,2 @@
-[AND Herp [AND Derp Blerp]]
-[AND Herp Derp]
+[AND [ALL :Cousin [EXISTS 0 Friend]] [ALL :Employee Female]]
+[AND [EXISTS 0 Employee] [ALL :Friend [EXISTS 3 Cousin]]]

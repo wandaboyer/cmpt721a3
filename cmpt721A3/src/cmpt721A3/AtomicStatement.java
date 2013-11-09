@@ -38,6 +38,11 @@ public class AtomicStatement extends Statement
 	@Override
 	public boolean subsumes(Statement other)
 	{
+		if(this.equals(UNIVERSAL_CONCEPT))
+		{
+			return true;
+		}
+		
 		if(other instanceof AtomicStatement)
 		{
 			return this.equals((AtomicStatement)other);

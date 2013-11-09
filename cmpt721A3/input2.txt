@@ -1,2 +1,2 @@
-[AND Person Person]
-[EXISTS 1 Person]
+[EXISTS 0 Employee]
+[EXISTS 2 Employee]
