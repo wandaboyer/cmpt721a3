@@ -1,3 +1,7 @@
+// CMPT 721 Assignment 3
+// Authors: James Twigg and Wanda Boyer
+//	    301229679       301242166
+
 package cmpt721A3;
 
 import java.util.Collection;
@@ -7,7 +11,6 @@ import java.util.Iterator;
 
 public class AndStatement extends Statement implements Iterable<Statement>
 {
-
 	private HashSet<AtomicStatement> atoms;
 	private HashMap<AtomicStatement, AllStatement> alls;
 	private HashMap<AtomicStatement, ExistsStatement> exists;
@@ -19,6 +22,7 @@ public class AndStatement extends Statement implements Iterable<Statement>
 		exists = new HashMap<AtomicStatement, ExistsStatement>();
 	}
 	
+	// Add the Atomic statement to the HashSet of atoms. 
 	private void addAtomicConjunct(AtomicStatement atom)
 	{
 		atoms.add(atom);
@@ -28,11 +32,14 @@ public class AndStatement extends Statement implements Iterable<Statement>
 	{
 		AllStatement current = alls.get(all.getRole());
 		if(current == null)
-		{
+		{	
+			// If there is no ALL in the AND with the same role,
+			// add this ALL to the alls HashMap with role as key.
 			alls.put(all.getRole(), all);
 		}
 		else
 		{
+			
 			AndStatement and = new AndStatement();
 			and.addConjunct(current.getDescription());
 			and.addConjunct(all.getDescription());
@@ -45,27 +52,38 @@ public class AndStatement extends Statement implements Iterable<Statement>
 		ExistsStatement current = exists.get(ex.getRole());
 		if(current == null)
 		{
+			// If no EXISTS exists in the AND's HashMap exists,
+			// then add the new EXISTS, keyed on it's role.
 			exists.put(ex.getRole(), ex);
 		}
 		else if(current.getQuantity() < ex.getQuantity())
 		{
+			// If the existing EXISTS has a larger quantity value,
+			// then change it to be the more general (smaller) value.
 			current.setQuantity(ex.getQuantity());
 		}
 	}
 	
+	// For collapsing nested ANDs
 	private void addAndConjunct(AndStatement and)
 	{
+		// Iterate through the set of Atomic statements and add them
+		// to the outer AND statement's atoms HashSet.
 		for(AtomicStatement atom : and.atoms)
 		{
 			addAtomicConjunct(atom);
 		}
 		
+		// Iterate through the collection of ALL statements and invoke
+		// the addAllConjunct method to make sure they're added appropriately.
 		Collection<AllStatement> otherAlls = and.alls.values();
 		for(AllStatement all : otherAlls)
 		{
 			addAllConjunct(all);
 		}
-		
+
+		// Iterate through the collection of EXISTS statements and invoke
+		// the addExistsConjunct method to make sure they're added appropriately.		
 		Collection<ExistsStatement> otherExs = and.exists.values();
 		for(ExistsStatement ex : otherExs)
 		{
@@ -73,6 +91,8 @@ public class AndStatement extends Statement implements Iterable<Statement>
 		}
 	}
 	
+	// Receive a Statement object, and according to what subclass it is an instance of,
+	// invoke the correct method to add it to the current AND statement.
 	public void addConjunct(Statement st)
 	{
 		if(st.isVacuous())
@@ -104,21 +124,30 @@ public class AndStatement extends Statement implements Iterable<Statement>
 		}
 	}
 	
+	
 	public Statement firstConjunct()
 	{
+		// If the set of Atomic statements is nonempty, then the
+		// first conjunct will be the from this set.
 		if(! atoms.isEmpty())
 		{
 			return atoms.iterator().next();
-			//Iterator<AtomicStatement> itr = atoms.iterator();
-			//return itr.hasNext() ? itr.next() : null;
 		}
 		
-		if(! alls.isEmpty())
+		// If the set of Atomic Statements was empty, check to see
+		// if the set of EXISTS is nonempty; if so, then the first
+		// conjunct will be from this set.
+		if(! exists.isEmpty())
 		{
-			return alls.values().iterator().next();
+			return exists.values().iterator().next();
+			
 		}
-		
-		return exists.values().iterator().next();
+
+		// Otherwise, if both the set of Atomic Statements and EXISTS
+		// are empty, then return from the list of ALLs (because of 
+		// how AND statements are parsed, we are guaranteed that this is
+		// nonempty).
+		return alls.values().iterator().next();
 	}
 	
 	public int size()
@@ -149,7 +178,8 @@ public class AndStatement extends Statement implements Iterable<Statement>
 	{
 		return atoms.contains(atom);
 	}
-		
+	
+	// The empty conjunction is vacuously true.	
 	@Override
 	public boolean isVacuous()
 	{
@@ -191,7 +221,6 @@ public class AndStatement extends Statement implements Iterable<Statement>
 	@Override
 	public boolean subsumes(Statement other)
 	{
-		
 		ExistsStatement otherEx;
 		AllStatement otherAll;
 		if(other instanceof AndStatement)

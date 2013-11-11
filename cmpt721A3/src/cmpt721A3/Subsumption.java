@@ -1,3 +1,7 @@
+// CMPT 721 Assignment 3
+// Authors: James Twigg and Wanda Boyer
+//	    301229679       301242166
+
 package cmpt721A3;
 
 public class Subsumption
